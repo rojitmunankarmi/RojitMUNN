@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rojit Munankarmi</title>
+  
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0e0b08;
+      --surface:   #1a1510;
+      --card:      #221d17;
+      --border:    #3a3028;
+      --accent:    #c9924a;
+      --accent2:   #8fb89a;
+      --text:      #e8ddd0;
+      --muted:     #8a7d6e;
+      --white:     #f5f0ea;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Trebuchet MS', Trebuchet, sans-serif;
+      font-weight: 400;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 5vw;
+      background: rgba(14,11,8,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Trebuchet MS', Trebuchet, sans-serif;
+      font-size: 1.25rem;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* hamburger */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: 0.3s; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 10rem 10vw 6rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 80% 50%, rgba(201,146,74,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 10% 80%, rgba(143,184,154,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+    }
+    h1 {
+      font-family: 'Trebuchet MS', Trebuchet, sans-serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 700;
+      line-height: 1.05;
+      color: var(--white);
+      opacity: 0; animation: fadeUp 0.9s 0.35s forwards;
+    }
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-sub {
+      max-width: 520px;
+      margin-top: 1.8rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+      opacity: 0; animation: fadeUp 0.9s 0.5s forwards;
+    }
+    .hero-pills {
+      display: flex; flex-wrap: wrap; gap: 0.7rem;
+      margin-top: 2.5rem;
+      opacity: 0; animation: fadeUp 0.9s 0.65s forwards;
+    }
+    .pill {
+      padding: 0.45rem 1.1rem;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    .pill.accent { border-color: var(--accent); color: var(--accent); }
+    .hero-scroll {
+      margin-top: 4rem;
+      display: flex; align-items: center; gap: 0.8rem;
+      color: var(--muted); font-size: 0.75rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      opacity: 0; animation: fadeUp 0.9s 0.8s forwards;
+    }
+    .hero-scroll::before {
+      content: '';
+      width: 40px; height: 1px;
+      background: var(--muted);
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 6rem 10vw; }
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    h2 {
+      font-family: 'Trebuchet MS', Trebuchet, sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--white);
+      font-weight: 700;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--surface); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .about-text p { color: var(--muted); margin-bottom: 1.2rem; }
+    .about-cards { display: flex; flex-direction: column; gap: 1.2rem; }
+    .about-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      display: flex; align-items: flex-start; gap: 1rem;
+      transition: border-color 0.3s;
+    }
+    .about-card:hover { border-color: var(--accent); }
+    .card-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+    .card-title { font-size: 0.9rem; font-weight: 500; color: var(--white); margin-bottom: 0.3rem; }
+    .card-desc { font-size: 0.82rem; color: var(--muted); }
+
+    /* ── PHOTOGRAPHY ── */
+    #photography {}
+    .photo-intro { color: var(--muted); max-width: 600px; margin-bottom: 3rem; }
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .photo-card {
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--card);
+      border: 1px solid var(--border);
+      transition: transform 0.35s, border-color 0.3s;
+      cursor: pointer;
+    }
+    .photo-card:hover { transform: translateY(-6px); border-color: var(--accent); }
+    .photo-placeholder {
+      width: 100%; aspect-ratio: 4/3;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.6rem;
+      background: linear-gradient(135deg, var(--surface) 0%, var(--card) 100%);
+      color: var(--muted);
+      font-size: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .photo-placeholder::after {
+      content: 'YOUR PHOTO';
+      position: absolute;
+      bottom: 0.8rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--border);
+    }
+    /* gradient tints per card */
+    .tint-1 { background: linear-gradient(135deg, #1a1208 0%, #2a1f10 100%); }
+    .tint-2 { background: linear-gradient(135deg, #081a0f 0%, #102a1a 100%); }
+    .tint-3 { background: linear-gradient(135deg, #0e0a1a 0%, #1a1028 100%); }
+    .tint-4 { background: linear-gradient(135deg, #1a0808 0%, #2a1010 100%); }
+    .tint-5 { background: linear-gradient(135deg, #0a1a10 0%, #12251a 100%); }
+    .tint-6 { background: linear-gradient(135deg, #1a1510 0%, #28201a 100%); }
+
+    .photo-info { padding: 1.2rem 1.4rem; }
+    .photo-location {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+    .photo-title { font-weight: 500; color: var(--white); margin-bottom: 0.4rem; font-size: 0.95rem; }
+    .photo-desc { font-size: 0.8rem; color: var(--muted); }
+
+    /* add-photo notice */
+    .photo-notice {
+      margin-top: 2.5rem;
+      padding: 1.2rem 1.6rem;
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    .photo-notice strong { color: var(--accent); }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--surface); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .contact-text p { color: var(--muted); margin-bottom: 1.5rem; }
+    .social-links { display: flex; flex-direction: column; gap: 1rem; }
+    .social-link {
+      display: flex; align-items: center; gap: 1.2rem;
+      padding: 1.1rem 1.4rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.3s;
+    }
+    .social-link:hover { border-color: var(--accent); color: var(--white); transform: translateX(6px); }
+    .social-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .social-name { font-weight: 500; font-size: 0.95rem; }
+    .social-handle { font-size: 0.8rem; color: var(--muted); }
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-form input,
+    .contact-form textarea {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem 1.1rem;
+      color: var(--text);
+      font-family: 'Trebuchet MS', Trebuchet, sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder { color: var(--muted); }
+    .contact-form input:focus,
+    .contact-form textarea:focus { border-color: var(--accent); }
+    .contact-form textarea { resize: vertical; min-height: 130px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.85rem 2rem;
+      background: var(--accent);
+      color: #0e0b08;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Trebuchet MS', Trebuchet, sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.3s, transform 0.2s;
+    }
+    .btn:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    /* ── CONNECT CARDS ── */
+    .connect-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 3rem;
+    }
+    .connect-card {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      padding: 1.3rem 1.5rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      text-decoration: none;
+      color: var(--text);
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    }
+    .connect-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--card-color);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3), 0 0 0 1px var(--card-color);
+    }
+    .connect-card-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 0% 50%, color-mix(in srgb, var(--card-color) 15%, transparent) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .connect-card:hover .connect-card-bg { opacity: 1; }
+    .connect-logo {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--card-color) 15%, var(--surface));
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: var(--card-color);
+      transition: background 0.3s, transform 0.3s;
+    }
+    .connect-card:hover .connect-logo {
+      background: color-mix(in srgb, var(--card-color) 25%, var(--surface));
+      transform: scale(1.08);
+    }
+    .connect-logo svg { width: 22px; height: 22px; }
+    .connect-info {
+      display: flex; flex-direction: column; gap: 0.2rem;
+      flex: 1; min-width: 0;
+    }
+    .connect-platform {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+    .connect-handle {
+      font-size: 0.75rem;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .connect-arrow {
+      font-size: 1.1rem;
+      color: var(--muted);
+      transition: color 0.3s, transform 0.3s;
+    }
+    .connect-card:hover .connect-arrow {
+      color: var(--card-color);
+      transform: translateX(4px);
+    }
+    .connect-form-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+    .connect-form-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+      .connect-cards { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 400px) {
+      .connect-cards { grid-template-columns: 1fr; }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2rem 10vw;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      color: var(--muted); font-size: 0.8rem;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* ── DIVIDER ── */
+    .divider { width: 60px; height: 2px; background: var(--accent); margin-bottom: 2rem; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── UPLOAD PANEL ── */
+    .upload-panel { margin-bottom: 2.5rem; }
+    .upload-drop {
+      border: 2px dashed var(--border);
+      border-radius: 14px;
+      padding: 2.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .upload-drop:hover, .upload-drop.dragover {
+      border-color: var(--accent);
+      background: rgba(201,146,74,0.05);
+    }
+    .upload-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
+    .upload-label { color: var(--text); font-size: 1rem; margin-bottom: 0.4rem; }
+    .upload-sub { color: var(--muted); font-size: 0.8rem; }
+
+    /* ── PHOTO CARD ACTIONS ── */
+    .photo-card { position: relative; }
+    .photo-actions {
+      position: absolute; top: 0.7rem; right: 0.7rem;
+      display: flex; gap: 0.4rem;
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .photo-card:hover .photo-actions { opacity: 1; }
+    .action-btn {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      font-size: 0.75rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s;
+    }
+    .action-btn:hover { transform: scale(1.15); }
+    .btn-edit { background: var(--accent); color: #0e0b08; }
+    .btn-delete { background: #c0392b; color: #fff; }
+    .photo-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; cursor: pointer; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .empty-state span { font-size: 2.5rem; display: block; margin-bottom: 0.8rem; }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 999;
+      align-items: center; justify-content: center;
+    }
+    .lightbox.active { display: flex; }
+    .lb-inner {
+      max-width: 85vw; max-height: 90vh;
+      display: flex; flex-direction: column;
+      align-items: center;
+    }
+    .lb-inner img {
+      max-width: 100%; max-height: 75vh;
+      object-fit: contain; border-radius: 8px;
+    }
+    .lb-info { margin-top: 1rem; text-align: center; }
+    .lb-title { color: var(--white); font-size: 1rem; font-weight: 500; }
+    .lb-desc { color: var(--muted); font-size: 0.85rem; margin-top: 0.3rem; }
+    .lb-close {
+      position: fixed; top: 1.2rem; right: 1.5rem;
+      background: none; border: none; color: var(--text);
+      font-size: 1.5rem; cursor: pointer;
+    }
+    .lb-prev, .lb-next {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      background: rgba(201,146,74,0.2); border: 1px solid var(--accent);
+      color: var(--accent); font-size: 1.8rem;
+      width: 44px; height: 44px; border-radius: 50%;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .lb-prev { left: 1.2rem; }
+    .lb-next { right: 1.2rem; }
+
+    /* ── EDIT MODAL ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 2rem;
+      width: 90%; max-width: 420px;
+    }
+    .modal-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      color: var(--text);
+      font-family: 'Trebuchet MS', sans-serif;
+      font-size: 0.88rem;
+      outline: none;
+      margin-bottom: 0.8rem;
+      transition: border-color 0.3s;
+    }
+    .modal-input:focus { border-color: var(--accent); }
+    .modal-input::placeholder { color: var(--muted); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .lb-prev, .lb-next { display: none; }
+    }
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0; background: var(--surface); padding: 1.5rem 5vw; gap: 1rem; }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+      .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+      section { padding: 4rem 6vw; }
+      #hero { padding: 8rem 6vw 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#hero">Rojit Munankarmi</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#photography">Photography</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <p class="hero-tag">Kathmandu, Nepal → Sydney, Australia</p>
+  <h1>Rojit<br /><em>Munankarmi</em></h1>
+  <p class="hero-sub">IT student. Entrepreneur. Chef. Freelance Photographer. Building things at the intersection of technology and creativity.</p>
+  <div class="hero-pills">
+    <span class="pill accent">Isrario Holdings</span>
+    <span class="pill">Information Technology</span>
+    <span class="pill">Photography</span>
+    <span class="pill">Chef</span>
+    <span class="pill">Sydney, Australia 🇦🇺</span>
+    <span class="pill">Nepal 🇳🇵</span>
+  </div>
+  <div class="hero-scroll">Scroll to explore</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="reveal">
+    <p class="section-label">Who I am</p>
+    <h2>A Collection of My Experiences.</h2>
+  </div>
+  <div class="about-grid reveal">
+    <div class="about-text">
+      <p>Hi, I'm Rojit, originally from Nepal, currently based in <strong style="color:var(--accent)">Sydney, Australia</strong> as an international student studying Information Technology, and running my own company, <strong style="color:var(--accent)">Isrario Holdings</strong>.</p>
+      <p>Before tech took over, I spent years as a chef, crafting dishes that told stories. Parallel to that, I roamed the hills, valleys, and festivals of Nepal as a freelance photographer, freezing fleeting moments in time.</p>
+      <p>These days I'm channeling that same creative energy - precision from the kitchen, patience from behind the lens - into building digital products and businesses from Sydney.</p>
+    </div>
+    <div class="about-cards">
+      <div class="about-card">
+        <div class="card-icon">💼</div>
+        <div>
+          <div class="card-title">Isrario Holdings</div>
+          <div class="card-desc">Founded and currently building Isrario Holdings — a venture focused on creating meaningful products and opportunities.</div>
+        </div>
+      </div>
+      <div class="about-card">
+        <div class="card-icon">💻</div>
+        <div>
+          <div class="card-title">Information Technology Student · Sydney</div>
+          <div class="card-desc">Studying IT in Sydney, Australia as an international student - passionate about software development, design, and building for the future.</div>
+        </div>
+      </div>
+      <div class="about-card">
+        <div class="card-icon">🍳</div>
+        <div>
+          <div class="card-title">Chef</div>
+          <div class="card-desc">Spent years mastering the culinary arts - discipline, creativity, and the art of bringing people together through food.</div>
+        </div>
+      </div>
+      <div class="about-card">
+        <div class="card-icon">📷</div>
+        <div>
+          <div class="card-title">Freelance Photographer · Nepal</div>
+          <div class="card-desc">Capturing the raw beauty, culture, and everyday life of Nepal through a lens. Landscapes, portraits, street - all of it.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTOGRAPHY -->
+<section id="photography">
+  <div class="reveal">
+    <p class="section-label">Through the lens</p>
+    <h2>Moments I Kept</h2>
+    <div class="divider"></div>
+    <p class="photo-intro">A selection of photographs from my time as a freelance photographer in Nepal — from mountain landscapes to street life and cultural moments.</p>
+  </div>
+
+  <div class="photo-grid reveal" id="photoGrid">
+
+    <div class="photo-card" onclick="openLightbox(0)">
+      <img src="photo.jpg" alt="Snow-covered Village" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block;" />
+      <div class="photo-info">
+        <p class="photo-location">Dolakha, Nepal (3,842m)</p>
+        <p class="photo-title">Kalinchowk: The Alpine Gateway</p>
+        <p class="photo-desc">A famous Himalayan pilgrimage site and hill station known for its panoramic mountain views and the sacred Bhagwati Temple. Located above the stone-housed Kuri Village, it is a top destination for winter snow, trekking, and sunrise views over the Gauri Shankar and Langtang ranges.</p>
+      </div>
+    </div>
+ 
+    <div class="photo-card" onclick="openLightbox(1)">
+      <img src="photo1.jpg" alt="The Sacred Eye" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block;" />
+      <div class="photo-info">
+        <p class="photo-location">Bhaktapur, Nepal</p>
+        <p class="photo-title">Betal: The Guardian of Biska Jatra</p>
+        <p class="photo-desc">A close-up study of the Netra Dan ritual, where the eyes of Lord Bhairav are ceremoniously placed before the New Year chariot procession. This moment signifies the spiritual awakening of the deity, bridging the gap between ancient tantric tradition and the living heritage of the Newar community.</p>
+      </div>
+    </div>
+
+    <div class="photo-card" onclick="openLightbox(2)">
+      <img src="photo2.jpg" alt="Tharu Culture Program" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block;" />
+      <div class="photo-info">
+        <p class="photo-location">Chitwan, Nepal</p>
+        <p class="photo-title">Tharu Culture Program</p>
+        <p class="photo-desc">Captured through a phone screen in a dark hall -the Tharu cultural dance performance alive in a frame within a frame.</p>
+      </div>
+    </div>
+
+    <div class="photo-card" onclick="openLightbox(3)">
+      <img src="photo3.JPG" alt="The Artist's Hand" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block;" />
+      <div class="photo-info">
+        <p class="photo-location">Bhaktapur, Nepal</p>
+        <p class="photo-title">The Artist's Hand</p>
+        <p class="photo-desc">A close-up of the traditional painting process on the Bhailkha (Bhairav’s chariot). This image captures the skilled hand of a local artist applying vibrant pigments to the massive wooden structure, a sacred task performed annually to restore the chariot's spiritual and visual power before the New Year procession</p>
+      </div>
+    </div>
+
+    <div class="photo-card" onclick="openLightbox(4)">
+      <img src="photo4.JPG" alt="Force on the Streets" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block;" />
+      <div class="photo-info">
+        <p class="photo-location">Kathmandu, Nepal</p>
+        <p class="photo-title">Force on the Streets</p>
+        <p class="photo-desc">Riot police march in formation through a busy Kathmandu street, a city paused, watching, waiting.</p>
+      </div>
+    </div>
+
+    <div class="photo-card" onclick="openLightbox(5)">
+      <img src="photo5.jpg" alt="River Crossing at Dusk" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block;" />
+      <div class="photo-info">
+        <p class="photo-location">Chitwan, Nepal</p>
+        <p class="photo-title">River Crossing at Dusk</p>
+        <p class="photo-desc">A long wooden canoe carries passengers across a grey river as dusk falls - timeless and serene.</p>
+      </div>
+    </div>
+
+    <div class="photo-card" onclick="openLightbox(6)">
+      <img src="photo6.JPG" alt="Momo — Soul of Nepal" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block;" />
+      <div class="photo-info">
+        <p class="photo-location">Basantapur, Nepal</p>
+        <p class="photo-title">Narayan Dai ko Masangalli ko MoMo</p>
+        <p class="photo-desc">A plate of steaming momo on a worn wooden table — Nepal's most beloved comfort food, simple and perfect.</p>
+      </div>
+    </div>
+
+    <div class="photo-card" onclick="openLightbox(7)">
+      <img src="photo7.jpg" alt="Chariot Festival" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block;" />
+      <div class="photo-info">
+        <p class="photo-location">Bhaktapur, Nepal</p>
+        <p class="photo-title">Biska Jatra: The Great Tug-of-War</p>
+        <p class="photo-desc">Capturing the raw energy and collective strength of the Bhaktapur community. This traditional tug-of-war between the upper and lower parts of the city is a central event of Biska Jatra, symbolizing unity and the powerful start of the New Year.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lb-close" onclick="closeLightbox()">✕</button>
+    <button class="lb-prev" onclick="event.stopPropagation(); changePhoto(-1)">‹</button>
+    <button class="lb-next" onclick="event.stopPropagation(); changePhoto(1)">›</button>
+    <div class="lb-inner" onclick="event.stopPropagation()">
+      <img id="lbImg" src="" alt="" />
+      <div class="lb-info">
+        <p class="lb-title" id="lbTitle"></p>
+        <p class="lb-desc" id="lbDesc"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="reveal">
+    <p class="section-label">Get in touch</p>
+    <h2>Let's Connect</h2>
+    <div class="divider"></div>
+    <p style="color:var(--muted);max-width:560px;margin-bottom:3rem;">Whether you want to talk technology, collaborate on a project, discuss photography, or just say hello from somewhere in the world — I'd love to hear from you.</p>
+  </div>
+
+  <!-- Social Cards -->
+  <div class="connect-cards reveal">
+
+    <a class="connect-card" href="https://www.facebook.com/share/14ZkkoJJvAg/?mibextid=wwXIfr" target="_blank" rel="noopener" style="--card-color:#1877F2;">
+      <div class="connect-card-bg"></div>
+      <div class="connect-logo">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.791-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+      </div>
+      <div class="connect-info">
+        <span class="connect-platform">Facebook</span>
+        <span class="connect-handle">Rojit Munankarmi</span>
+      </div>
+      <div class="connect-arrow">→</div>
+    </a>
+
+    <a class="connect-card" href="https://www.instagram.com/_rojitmunankarmi?igsh=eWExbXJtNGI5cHpv&utm_source=qr" target="_blank" rel="noopener" style="--card-color:#E1306C;">
+      <div class="connect-card-bg"></div>
+      <div class="connect-logo">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      </div>
+      <div class="connect-info">
+        <span class="connect-platform">Instagram</span>
+        <span class="connect-handle">@_rojitmunankarmi</span>
+      </div>
+      <div class="connect-arrow">→</div>
+    </a>
+
+    <a class="connect-card" href="https://www.facebook.com/share/18SqKmQSo9/?mibextid=wwXIfr" target="_blank" rel="noopener" style="--card-color:#c9924a;">
+      <div class="connect-card-bg"></div>
+      <div class="connect-logo">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-1V4c0-1.1-.9-2-2-2H7C5.9 2 5 2.9 5 4v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM7 4h10v2H7V4zm13 15H4V8h16v11zm-8-2a3 3 0 100-6 3 3 0 000 6z"/></svg>
+      </div>
+      <div class="connect-info">
+        <span class="connect-platform">Isrario Holdings</span>
+        <span class="connect-handle"></span>
+      </div>
+      <div class="connect-arrow">→</div>
+    </a>
+
+    <a class="connect-card" href="mailto:rmeg058@gmail.com" style="--card-color:#EA4335;">
+      <div class="connect-card-bg"></div>
+      <div class="connect-logo">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 010 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
+      </div>
+      <div class="connect-info">
+        <span class="connect-platform">Email</span>
+        <span class="connect-handle">rmeg058@gmail.com</span>
+      </div>
+      <div class="connect-arrow">→</div>
+    </a>
+
+  </div>
+
+  <!-- Contact Form -->
+  <div class="connect-form-wrap reveal">
+    <p class="connect-form-label">Or send a direct message</p>
+    <form class="contact-form" action="https://formspree.io/f/mojyaoap" method="POST">
+      <div class="form-row">
+        <input type="text" name="name" placeholder="Your name" required />
+        <input type="email" name="email" placeholder="Your email" required />
+      </div>
+      <textarea name="message" placeholder="Your message…" required></textarea>
+      <button class="btn" type="submit">Send Message →</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Rojit Munankarmi · <a href="https://www.facebook.com/share/18SqKmQSo9/?mibextid=wwXIfr" target="_blank">Isrario Holdings</a></span>
+  <span>Crafted with ☕ &amp; 🇳🇵</span>
+</footer>
+
+<script>
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Nav active highlight
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
+    });
+  });
+
+  // ── LIGHTBOX ──
+  const photoCards = document.querySelectorAll('.photo-grid .photo-card');
+  let currentLightbox = 0;
+
+  function openLightbox(i) {
+    currentLightbox = i;
+    const card = photoCards[i];
+    const img = card.querySelector('img');
+    const title = card.querySelector('.photo-title');
+    const desc = card.querySelector('.photo-desc');
+    document.getElementById('lbImg').src = img.src;
+    document.getElementById('lbTitle').textContent = title ? title.textContent : '';
+    document.getElementById('lbDesc').textContent = desc ? desc.textContent : '';
+    document.getElementById('lightbox').classList.add('active');
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+  }
+
+  function changePhoto(dir) {
+    currentLightbox = (currentLightbox + dir + photoCards.length) % photoCards.length;
+    openLightbox(currentLightbox);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('active')) return;
+    if (e.key === 'ArrowRight') changePhoto(1);
+    if (e.key === 'ArrowLeft') changePhoto(-1);
+    if (e.key === 'Escape') closeLightbox();
+  });
+</script>
+</body>
+</html>
